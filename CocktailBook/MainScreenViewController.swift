@@ -1,9 +1,7 @@
 import UIKit
 
 class MainScreenViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-        
-    var selectedIndex = 0
-    
+            
     //Static string
     let allStr = "All Cocktails"
     let alcoholicCocktailsStr = "Alcoholic Cocktails"
@@ -20,6 +18,8 @@ class MainScreenViewController: UIViewController, UITableViewDelegate, UITableVi
 
     private let cocktailsAPI: CocktailsAPI = FakeCocktailsAPI()
     
+    // MARK: View Life Cycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,6 +29,7 @@ class MainScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         //Fetch data from sample.json file
         self.fetchData()
         
+        //Added notification for updating the favourite value
         self.addNotificationCenter()
     }
     
@@ -38,6 +39,8 @@ class MainScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         self.title = self.allStr
     }
     
+    // MARK: Data Fetching
+
     func fetchData() {
         //Parsing the JSON file sample.json from bundle
         cocktailsAPI.fetchCocktails { result in
@@ -59,12 +62,15 @@ class MainScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
+    // MARK: Notification Actions
+
     func addNotificationCenter() {
         NotificationCenter.default.addObserver(self, selector:#selector(self.dataChanged(_:)), name: Notification.Name("dataChanged"), object: nil)
     }
     
     @objc func dataChanged(_ notification: NSNotification?) {
         
+        //Updating the favourite value according ot the user interaction
         let cocktailBookArr = self.getFilteredArray()
         
         let filterCocktailBookModelArr = cocktailBookArr.filter { $0.id! == notification?.userInfo!["id"] as? String ?? "" }
@@ -79,11 +85,17 @@ class MainScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         
         self.tblObj.reloadData()
         
+        //Removing Observer
         NotificationCenter.default.removeObserver(self)
+        
+        //After removing Observer adding it freshly for new use
         self.addNotificationCenter()
     }
 
+    // MARK: Button Actions
+
     @IBAction func segmentControllClick(_ sender: Any) {
+        //Segment / Filter / Nav Bar Title values are changing here
         switch segmentControlOutlet.selectedSegmentIndex {
         case 0:
             self.title = self.allStr
@@ -101,9 +113,12 @@ class MainScreenViewController: UIViewController, UITableViewDelegate, UITableVi
             break
         }
         
+        //Refershing data accordingly
         self.tblObj.reloadData()
     }
     
+    // MARK: Get Filtered Model Array
+
     func getFilteredArray() -> [CocktailBookModel] {
         //Display the favorite cocktails at the beginning in the list (pinned) respecting the filter state
         self.cocktailBookModelArr = self.cocktailBookModelArr.sorted { $0.name!.lowercased() < $1.name!.lowercased() }
@@ -119,9 +134,12 @@ class MainScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         else if (self.filterIndex == 2) {
             cocktailBookListArr = self.cocktailBookModelArr.filter { $0.type! == self.nonAlcoholicStr }
         }
+        //Returing data according to top filter selected
         return cocktailBookListArr
     }
     
+    // MARK: UIUITableViewViewDataSource
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -151,11 +169,11 @@ class MainScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         return cell
     }
     
+    // MARK: UIUITableViewViewDelegate
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-                
-        self.selectedIndex = indexPath.row
-        
+                        
         let cocktailBookModel = self.getFilteredArray()[indexPath.row]
         
         let storyboard = UIStoryboard(name: "MainScreenStoryboard", bundle: nil)

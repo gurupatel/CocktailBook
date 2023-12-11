@@ -24,6 +24,8 @@ class DetailMainViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var imgHgtConstraint: NSLayoutConstraint!
     @IBOutlet weak var tblHgtConstraint: NSLayoutConstraint!
 
+    // MARK: View Life Cycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -62,6 +64,8 @@ class DetailMainViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
+    // MARK: Button Actions
+
     @IBAction func favouriteBtnPressed(sender : UIButton) {
         sender.backgroundColor = .clear
 
@@ -84,6 +88,8 @@ class DetailMainViewController: UIViewController, UITableViewDelegate, UITableVi
         NotificationCenter.default.post(name: Notification.Name("dataChanged"), object: nil, userInfo: searchDataDict)
     }
     
+    // MARK: UIUITableViewViewDataSource
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -117,6 +123,8 @@ class DetailMainViewController: UIViewController, UITableViewDelegate, UITableVi
         return cell
     }
     
+    // MARK: UIUITableViewViewDelegate
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
