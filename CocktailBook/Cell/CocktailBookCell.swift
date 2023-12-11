@@ -11,6 +11,7 @@ class CocktailBookCell: UITableViewCell {
     
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var lblDescription: UILabel!
+    @IBOutlet weak var favouriteImg: UIImageView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
