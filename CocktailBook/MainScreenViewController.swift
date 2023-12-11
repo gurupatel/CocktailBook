@@ -46,6 +46,9 @@ class MainScreenViewController: UIViewController, UITableViewDelegate, UITableVi
                     //Creating the CocktailBookModel object
                     self.cocktailBookModelArr = try JSONDecoder().decode([CocktailBookModel].self, from: data)
                     
+                    //Display a list of the cocktails in an alphabetical order
+                    self.cocktailBookModelArr = self.cocktailBookModelArr.sorted { $0.name!.lowercased() < $1.name!.lowercased() }
+                    
                     //Reload TableView if data is available
                     if (self.cocktailBookModelArr.count > 0) {
                         DispatchQueue.main.async {
