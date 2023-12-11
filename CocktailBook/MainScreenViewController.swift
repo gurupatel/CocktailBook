@@ -45,10 +45,7 @@ class MainScreenViewController: UIViewController, UITableViewDelegate, UITableVi
                 do {
                     //Creating the CocktailBookModel object
                     self.cocktailBookModelArr = try JSONDecoder().decode([CocktailBookModel].self, from: data)
-                    
-                    //Display a list of the cocktails in an alphabetical order
-                    self.cocktailBookModelArr = self.cocktailBookModelArr.sorted { $0.name!.lowercased() < $1.name!.lowercased() }
-                    
+                                        
                     //Reload TableView if data is available
                     if (self.cocktailBookModelArr.count > 0) {
                         DispatchQueue.main.async {
@@ -108,6 +105,12 @@ class MainScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func getFilteredArray() -> [CocktailBookModel] {
+        //Display the favorite cocktails at the beginning in the list (pinned) respecting the filter state
+        self.cocktailBookModelArr = self.cocktailBookModelArr.sorted { $0.name!.lowercased() < $1.name!.lowercased() }
+
+        //Display a list of the cocktails in an alphabetical order
+        self.cocktailBookModelArr = self.cocktailBookModelArr.sorted { $0.favourite ?? false && !($1.favourite ?? false) }
+
         var cocktailBookListArr = self.cocktailBookModelArr
         
         if (self.filterIndex == 1) {

@@ -111,7 +111,7 @@ class DetailMainViewController: UIViewController, UITableViewDelegate, UITableVi
         self.totalHgt = (self.totalHgt + cell.lblTitle.frame.size.height)
         
         if ((self.cocktailBookModel.ingredients!.count - 1) == indexPath.row) {
-            self.tblHgtConstraint.constant = self.totalHgt + 50 //(Padding)
+            self.tblHgtConstraint.constant = self.totalHgt + 60 //(Padding)
         }
 
         return cell
